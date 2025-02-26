@@ -119,19 +119,3 @@ export const computeStatistics = (population, round) => {
   return { round, infected };
 };
 
-
-// Example: Compute stats (students customize)
-export const computeStatistics = (population, round) => {
-  let infected = 0;
-  let newlyInfected = 0;
-  for (let p of population) {
-    if (p.infected) {
-      infected += 1; // Count the infected
-    }
-    if (p.newlyInfected) {
-      newlyInfected += 1; // Count the newly infected
-    }
-  }
-  return { round, infected, newlyInfected };
-};
-
