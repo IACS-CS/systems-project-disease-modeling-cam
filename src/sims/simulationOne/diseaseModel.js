@@ -11,7 +11,7 @@ You can implement a simple model which does one of the following:
    in line) or randomly selecting people to be in contact (just do one of these for your model).
 
 2. Take the "handshake" simulation code as your model, but make it so you can recover from the disease. How does the
-spread of the disease change when you set people to recover after a set number of days.
+spread of the disease change when you set people to recover after a set number of days?
 
 3. Add a "quarantine" percentage to the handshake model: if a person is infected, they have a chance of being quarantined
 and not interacting with others in each round.
@@ -23,16 +23,17 @@ and not interacting with others in each round.
  * 
  * What we are simulating:
  * A disease spreads, people get sick, people quarantine after 50% of the population gets sick,
- * people recover and then quarantine ends when 1% of people are not sick
+ * people recover and then quarantine ends when 1% of people are not sick.
+ * 
  * What elements we have to add:
- * 
- * In plain language, what our model does:
- * 
+ * - Faster spread until 50% of the population is infected.
+ * - Adjusted infection rate dynamically.
+ * - Increased contact per round for faster spread.
  */
 
 export const defaultSimulationParameters = {
-  infectionChance: 50,
-  recoveryTime: 14, // Number of rounds before recovery
+  infectionChance: 70, // Increased initial infection chance for faster spread
+  recoveryTime: 20, // Number of rounds before recovery
 };
 
 /* Creates your initial population. By default, we *only* track whether people
@@ -62,8 +63,8 @@ export const createPopulation = (size = 1600) => {
   return population;
 };
 
-// Example: Maybe infect a person (students should customize this)
-const updateIndividual = (person, contact, params) => {
+// Updates a single individual based on contacts
+const updateIndividual = (person, contacts, params) => {
   if (person.infected) {
     person.daysInfected++;
     if (person.daysInfected >= params.recoveryTime) {
@@ -71,20 +72,34 @@ const updateIndividual = (person, contact, params) => {
       person.daysInfected = 0;
     }
   }
-  if (contact.infected && Math.random() * 100 < params.infectionChance && !person.infected) {
-    person.infected = true;
-    person.daysInfected = 1;
+
+  for (let contact of contacts) {
+    if (contact.infected && Math.random() * 100 < params.infectionChance && !person.infected) {
+      person.infected = true;
+      person.daysInfected = 1;
+      break; // Only need one contact to infect
+    }
   }
 };
 
-// Example: Update population (students decide what happens each turn)
+// Updates the entire population each round
 export const updatePopulation = (population, params) => {
   let infectedCount = population.filter(p => p.infected).length;
   let totalPopulation = population.length;
-
+  
   let inQuarantine = infectedCount / totalPopulation >= 0.5;
   let endQuarantine = infectedCount / totalPopulation === 0.01;
 
+  // Adjust infection chance: high at start, lower over time
+  if (!inQuarantine) {
+    if (infectedCount < totalPopulation * 0.5) {
+      params.infectionChance = 90; // Make it very easy to spread before quarantine
+    } else {
+      params.infectionChance = 50; // Reduce infection rate after quarantine begins
+    }
+  }
+
+  // If quarantined, just let people recover
   if (inQuarantine) {
     return population.map(person => {
       if (person.infected) {
@@ -102,11 +117,16 @@ export const updatePopulation = (population, params) => {
     inQuarantine = false;
   }
 
+  // Spread disease: each person contacts two neighbors
   for (let i = 0; i < population.length; i++) {
     let p = population[i];
-    let contact = population[(i + 1) % population.length];
-    updateIndividual(p, contact, params);
+    let contacts = [
+      population[(i + 1) % population.length], // Next person
+      population[(i - 1 + population.length) % population.length], // Previous person
+    ];
+    updateIndividual(p, contacts, params);
   }
+
   return population;
 };
 
