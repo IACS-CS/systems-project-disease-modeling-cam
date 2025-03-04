@@ -23,10 +23,14 @@ const renderPatients = (population) => {
   }
 
   function renderEmoji(p) {
-    if (p.newlyInfected) {
-      return "🤧"; // Sneezing Face for new cases
-    } else if (p.infected) {
-      return "🤢"; // Vomiting Face for already sick
+    if (p.newlyExposed) {
+      return "🤧"; // Sneezing Face for new exposures
+    } else if (p.state === "exposed") {
+      return "😐"; // Neutral face for exposed (incubating)
+    } else if (p.state === "infected") {
+      return p.quarantined ? "😷" : "🤢"; // Quarantined: Masked; Infected: Vomiting Face
+    } else if (p.state === "recovered") {
+      return "😌"; // Relieved face for recovered
     } else {
       return "😀"; // Healthy person
     }
@@ -95,23 +99,23 @@ const Simulation = () => {
   // Auto-run simulation effect
   useEffect(() => {
     if (autoMode) {
-      setTimeout(runTurn, 500);
+      const timer = setTimeout(runTurn, 500);
+      return () => clearTimeout(timer);
     }
   }, [autoMode, population]);
 
   return (
     <div>
       <section className="top">
-        <h1>My Second Custom Simulation</h1>
+        <h1>COVID‑19 Simulation with Quarantine, Incubation & Reinfection</h1>
         <p>
-          Edit <code>simulationTwo/diseaseModel.js</code> to define how your
-          simulation works. This one should try to replicate features of a real
-          world illness and/or intervention.
+          Edit <code>diseaseModel.js</code> to adjust how your simulation works. This model
+          includes an incubation period, quarantine mechanics, and reinfection dynamics to recreate COVID‑19.
         </p>
 
         <p>
           Population: {population.length}. Infected:{" "}
-          {population.filter((p) => p.infected).length}
+          {population.filter((p) => p.state === "infected").length}
         </p>
 
         <button onClick={runTurn}>Next Turn</button>
@@ -119,8 +123,8 @@ const Simulation = () => {
         <button onClick={() => setAutoMode(false)}>Stop</button>
         <button onClick={resetSimulation}>Reset Simulation</button>
 
-        <div>
-          {/* Add custom parameters here... */}
+        <div className="controls">
+          {/* Original population size controls */}
           <label>
             Population:
             <div className="vertical-stack">
@@ -143,6 +147,111 @@ const Simulation = () => {
               />
             </div>
           </label>
+          {/* Additional simulation parameter sliders */}
+          <div className="parameter-sliders">
+            <label>
+              Infection Rate:
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                value={simulationParameters.infectionRate}
+                onChange={(e) =>
+                  setSimulationParameters({
+                    ...simulationParameters,
+                    infectionRate: parseFloat(e.target.value),
+                  })
+                }
+              />
+              {simulationParameters.infectionRate}
+            </label>
+            <label>
+              Incubation Time:
+              <input
+                type="range"
+                min="1"
+                max="14"
+                step="1"
+                value={simulationParameters.incubationTime}
+                onChange={(e) =>
+                  setSimulationParameters({
+                    ...simulationParameters,
+                    incubationTime: parseInt(e.target.value),
+                  })
+                }
+              />
+              {simulationParameters.incubationTime}
+            </label>
+            <label>
+              Recovery Time:
+              <input
+                type="range"
+                min="1"
+                max="30"
+                step="1"
+                value={simulationParameters.recoveryTime}
+                onChange={(e) =>
+                  setSimulationParameters({
+                    ...simulationParameters,
+                    recoveryTime: parseInt(e.target.value),
+                  })
+                }
+              />
+              {simulationParameters.recoveryTime}
+            </label>
+            <label>
+              Reinfection Probability:
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                value={simulationParameters.reinfectionProbability}
+                onChange={(e) =>
+                  setSimulationParameters({
+                    ...simulationParameters,
+                    reinfectionProbability: parseFloat(e.target.value),
+                  })
+                }
+              />
+              {simulationParameters.reinfectionProbability}
+            </label>
+            <label>
+              Quarantine Threshold:
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                value={simulationParameters.quarantineThreshold}
+                onChange={(e) =>
+                  setSimulationParameters({
+                    ...simulationParameters,
+                    quarantineThreshold: parseFloat(e.target.value),
+                  })
+                }
+              />
+              {simulationParameters.quarantineThreshold}
+            </label>
+            <label>
+              Quarantine Reduction Factor:
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                value={simulationParameters.quarantineReductionFactor}
+                onChange={(e) =>
+                  setSimulationParameters({
+                    ...simulationParameters,
+                    quarantineReductionFactor: parseFloat(e.target.value),
+                  })
+                }
+              />
+              {simulationParameters.quarantineReductionFactor}
+            </label>
+          </div>
         </div>
       </section>
 
