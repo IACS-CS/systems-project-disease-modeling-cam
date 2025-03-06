@@ -20,7 +20,7 @@ and not interacting with others in each round.
 
 /**
  * Authors: 
- * 
+ * Cam Mihir
  * What we are simulating:
  * A disease spreads, people get sick, people quarantine after 50% of the population gets sick,
  * people recover and then quarantine ends when 1% of people are not sick.
@@ -30,7 +30,7 @@ and not interacting with others in each round.
  * - Adjusted infection rate dynamically.
  * - Increased contact per round for faster spread.
  */
-
+// used ChatGPT constantly to bring ideas to code 
 export const defaultSimulationParameters = {
   infectionChance: 70, // Increased initial infection chance for faster spread
   recoveryTime: 20, // Number of rounds before recovery

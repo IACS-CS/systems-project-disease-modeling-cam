@@ -25,10 +25,10 @@ import { shufflePopulation } from "../../lib/shufflePopulation";
 
 /**
  * Authors: 
- * 
+ * Cam Mihir
  * What we are simulating:
  *   This simulation models an infectious disease with quarantine, an incubation period, and reinfection mechanics.
- *   It has been adjusted to recreate COVID-19 dynamics.
+ *   It has been adjusted to recreate COVID-19.
  * 
  * What we are attempting to model from the real world:
  *   We simulate features of COVID-19:
@@ -36,7 +36,7 @@ import { shufflePopulation } from "../../lib/shufflePopulation";
  *     - A period of active infection where patients show symptoms.
  *     - Recovery with a very low chance of reinfection.
  *     - Quarantine measures that reduce the infection rate when a threshold of active infections is reached.
- *   For quarantine guidelines, see: https://www.cdc.gov/coronavirus/2019-ncov/prevent-getting-sick/quarantine.html :contentReference[oaicite:0]{index=0}
+ *   
  * 
  * What we are leaving out of our model:
  *   Detailed movement, demographic factors, and the full spectrum of disease severity.
