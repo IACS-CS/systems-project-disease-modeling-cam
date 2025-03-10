@@ -109,7 +109,7 @@ const Simulation = () => {
       <section className="top">
         <h1>COVID‑19 Simulation with Quarantine, Incubation & Reinfection</h1>
         <p>
-          Edit <code>diseaseModel.js</code> to adjust how your simulation works. This model
+         <code>diseaseModel.js</code>  This model
           includes an incubation period, quarantine mechanics, and reinfection dynamics to recreate COVID‑19.
         </p>
 

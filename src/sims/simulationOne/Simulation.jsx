@@ -107,11 +107,12 @@ const Simulation = () => {
       <section className="top">
         <h1>My Custom Simulation</h1>
         <p>
-          Edit <code>simulationOne/diseaseModel.js</code> to define how your
-          simulation works. This one should try to introduce *one* complicating
-          feature to the basic model.
-        </p>
+          <code>simulationOne/diseaseModel.js</code> This simulates a disease 
+          that when spreading, the infected people will have to quarentine until
+           only a small percentage is infected and then the quarentine will be lifted
+         
 
+</p>
         <p>
           Population: {population.length}. Infected:{" "}
           {population.filter((p) => p.infected).length}
