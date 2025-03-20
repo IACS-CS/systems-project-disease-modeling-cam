@@ -59,7 +59,8 @@ import { shufflePopulation } from "../../lib/shufflePopulation";
  *   Infected individuals spread the disease to nearby healthy ones. Once exposed, individuals undergo an incubation period
  *   before becoming infectious. After a set period of infection, they recover, though there is a very small chance they lose immunity.
  *   If enough people are actively infected, quarantine measures are activated, reducing further transmission.
- //used ChatGPT constantly to bring ideas to code 
+ * used ChatGPT constantly to bring ideas to code 
+*/
 
 // Default parameters -- any properties you add here
 // will be passed to your disease model when it runs.
